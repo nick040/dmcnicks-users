@@ -12,6 +12,8 @@
 # David McNicol <david@mcnicks.org>
 #
 
-class accounts ( $users ) {
+class users (
+  $users
+) {
   create_resources('users::user', $users)
 }
