@@ -8,7 +8,7 @@ module Puppet::Parser::Functions
       parts = key.split
       comment = "#{user}_#{count}"
       sshkeyhash[comment] = Hash.new
-      sshkeyhash[comment]['type'] = /^ssh-(\w+)$/.match(parts[0])[1]
+      sshkeyhash[comment]['type'] = parts[0]
       sshkeyhash[comment]['key'] = parts[1]
       count += 1
     end
