@@ -9,7 +9,7 @@ module Puppet::Parser::Functions
       next unless attrs['sshkeys'].is_a?(Array)
       attrs['sshkeys'].each do |key|
         parts = key.split
-        comment = "#{prefix}_#{user}_#{count}"
+        comment = "#{prefix}_#{username}_#{count}"
         sshkeyhash[comment] = Hash.new
         sshkeyhash[comment]['type'] = parts[0]
         sshkeyhash[comment]['key'] = parts[1]
