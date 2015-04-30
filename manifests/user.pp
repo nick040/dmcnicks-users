@@ -72,7 +72,7 @@ define users::user (
 
   # Add SSH keys.
 
-  $sshkey_hash = prepare_sshkey_hash($username, $sshkeys)
+  $sshkey_hash = users_hash_sshkeys($username, $sshkeys)
 
   file { "/home/${username}/.ssh":
     ensure  => 'directory',

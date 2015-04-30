@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:accounts_merge_sshkeys, :type => :rvalue, :arity => 2) do |args|
+  newfunction(:users_merge_sshkeys, :type => :rvalue, :arity => 2) do |args|
     count = 0
     prefix = args[0]
     sshkeyhash = Hash.new

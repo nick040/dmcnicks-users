@@ -1,5 +1,5 @@
 module Puppet::Parser::Functions
-  newfunction(:prepare_sshkey_hash, :type => :rvalue, :arity => 2) do |args|
+  newfunction(:users_hash_sshkeys, :type => :rvalue, :arity => 2) do |args|
     count = 0
     user = args[0]
     sshkeyhash = Hash.new
