@@ -2,7 +2,7 @@
   "name": "dmcnicks-users",
   "version": "1.0.0",
   "author": "dmcnicks",
-  "summary": "Configures accounts on nodes.",
+  "summary": "Configures local users on nodes.",
   "license": "Apache-2.0",
   "source": "https://github.com/dmcnicks/dmcnicks-users",
   "project_page": "https://github.com/dmcnicks/dmcnicks-users",
