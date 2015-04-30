@@ -90,6 +90,4 @@ define users::user (
 
   create_resources('ssh_authorized_key', $sshkey_hash, $defaults)
 
-  }
-
 }
