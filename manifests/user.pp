@@ -30,12 +30,12 @@
 #
 
 define users::user (
-  $username = $title,
   $uid,
+  $username = $title,
   $realname = $title,
   $password = '!',
   $groups = [],
-  $sshkeys = false
+  $sshkeys = []
 ) {
 
   # Create the user's group.
@@ -47,16 +47,17 @@ define users::user (
   # Create the user.
 
   user { $username:
-    ensure     => 'present',
-    uid        => $uid,
-    gid        => $username,
-    groups     => $groups,
-    shell      => '/bin/bash',
-    home       => "/home/${username}",
-    managehome => true,
-    comment    => $realname,
-    password   => $password,
-    require    => [ Group[$username], Group[$groups] ]
+    ensure         => 'present',
+    uid            => $uid,
+    gid            => $username,
+    comment        => $realname,
+    password       => $password,
+    groups         => $groups,
+    shell          => '/bin/bash',
+    home           => "/home/${username}",
+    managehome     => true,
+    purge_ssh_keys => true,
+    require        => [ Group[$username], Group[$groups] ]
   }
 
   # Create the user's home directory.
@@ -69,25 +70,25 @@ define users::user (
     require => [ User[$username], Group[$username] ]
   }
 
-  # Add SSH keys if they are specified.
+  # Add SSH keys.
 
-  if $sshkeys {
+  $sshkey_hash = prepare_sshkey_hash($username, $sshkeys)
 
-    file { "/home/${username}/.ssh":
-      ensure  => 'directory',
-      owner   => $username,
-      group   => $username,
-      mode    => '0700',
-      require => File["/home/${username}"]
-    }
+  file { "/home/${username}/.ssh":
+    ensure  => 'directory',
+    owner   => $username,
+    group   => $username,
+    mode    => '0700',
+    require => File["/home/${username}"]
+  }
   
-    $defaults = {
-      ensure  => 'present',
-      user    => $username,
-      require => File["/home/${username}/.ssh"]
-    }
+  $defaults = {
+    ensure  => 'present',
+    user    => $username,
+    require => File["/home/${username}/.ssh"]
+  }
 
-    create_resources('ssh_authorized_key', $sshkeys, $defaults)
+  create_resources('ssh_authorized_key', $sshkey_hash, $defaults)
 
   }
 
