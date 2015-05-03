@@ -73,7 +73,7 @@ be added to the user's authorized_keys file:
         - webdevs
       sshkeys:
         - ssh-rsa AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAA user@host
-        - ssh-dsa BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB...BBB user@host
+        - ssh-dss BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB...BBB user@host
 
 ### Custom functions
 
