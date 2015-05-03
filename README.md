@@ -75,14 +75,24 @@ be added to the user's authorized_keys file:
         - ssh-rsa AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAA user@host
         - ssh-dsa BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB...BBB user@host
 
-### The `merge_sshkeys_for` function
+### Custom functions
 
-This module defines a custom function called `merge_sshkeys_for` that produces
-a single hash of SSH keys from a hash of users. This can be used to insert
-public keys into a shared account. For example:
+This module defines a number custom function functions that can be used to
+manipulate user data and ssh keys.
+
+#### `users_merge_sshkeys`
+
+The `users_merge_sshkeys` function produces a single hash of SSH keys from a hash of users that is properly structured for use with the `ssh_authorized_key`
+built-in function.
+
+The first argument to the `users_merge_sshkeys` function is a prefix that is
+added to each SSH key name to keep each declared `ssh_authorized_key` resource
+unique.
+
+This can be used to insert public keys into a shared account. For example:
 
     $users = hiera_hash('accounts::users')
-    $sshkeys = merge_sshkeys_for('git', $users)
+    $sshkeys = users_merge_sshkeys('git', $users)
 
     $defaults = {
       ensure => 'present',
@@ -91,12 +101,59 @@ public keys into a shared account. For example:
 
     create_resources('ssh_authorized_key', $sshkeys, $defaults)
 
-This will gather all of the SSH keys defined for all of the users and add
-all of them to the `authorized_keys` file of the `git` user.
+#### `users_hash_sshkeys`
 
-The first argument to the `merge_sshkeys_for` function is a prefix that is
-added to each SSH key name to keep each declared `ssh_authorized_key` resource
-unique.
+The `users_hash_sshkeys` function produces a hash of SSH keys that is properly structured for use with the `ssh_authorized_key` from an array of SSH keys.
+
+The first argument to the `users_merge_sshkeys` function is the name of the
+users that the SSH keys will be added to, which ensures that each declared
+`ssh_authorized_key` resource will be unique.
+
+This can be used to insert deploy keys into a shared account. For example:
+
+    $deploykeys = [
+      "ssh-rsa AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA...AAA user1@host1",
+      "ssh-dss BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB...BBB user2@host2"
+    ]
+
+    $sshkeys = users_hash_sshkeys('git', $deploykeys)
+
+    $defaults = {
+      ensure => 'present',
+      user   => 'git'
+    }
+
+    create_resources('ssh_authorized_key', $sshkeys, $defaults)
+
+The difference between the `users_hash_sshkeys` and `users_merge_sshkeys`
+function is that `users_hash_sshkeys` expects a simple array of strings
+containing SSH keys. 
+
+#### `users_filter_by_group`
+
+The `users_hash_sshkeys` function pulls SSH keys from all defined users
+but what if you only want some of those users to be given access to a
+particular account? The `users_filter_by_group` function can be used before
+the `users_hash_sshkeys` function to filter only users that belong to
+certain groups. For example:
+
+    $users = hiera_hash('accounts::users')
+    $sshkeys = users_merge_sshkeys('git', $users)
+
+    $admins = users_filter_by_group($users, 'admin')
+    $devs = users_filter_by_group($users, [ 'wp', 'rails', 'lamp' ])
+
+These filtered hashes of users can then be used just like the hash of all
+users:
+
+    $adminkeys = users_merge_sshkeys('git_admins', $admins)
+
+    $defaults = {
+      ensure => 'present',
+      user   => 'git'
+    }
+
+    create_resources('ssh_authorized_key', $adminkeys, $defaults)
 
 ## Usage
 
