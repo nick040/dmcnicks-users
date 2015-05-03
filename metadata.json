@@ -1,6 +1,6 @@
 {
   "name": "dmcnicks-users",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": "dmcnicks",
   "summary": "Configures local users on nodes.",
   "license": "Apache-2.0",
