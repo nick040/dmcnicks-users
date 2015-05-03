@@ -3,8 +3,8 @@ module Puppet::Parser::Functions
     count = 0
     user = args[0]
     sshkeyhash = Hash.new
-    return sshkeyhash unless args[1].is_a?(Array)
-    args[1].each do |key|
+    keys = [ args[1] ].flatten
+    keys.each do |key|
       parts = key.split
       comment = "#{user}_#{count}"
       sshkeyhash[comment] = Hash.new
