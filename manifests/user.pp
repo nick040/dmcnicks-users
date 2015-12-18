@@ -49,7 +49,7 @@ define users::user (
   user { $username:
     ensure         => 'present',
     uid            => $uid,
-    gid            => $username,
+    gid            => 33,
     comment        => $realname,
     password       => $password,
     groups         => $groups,
