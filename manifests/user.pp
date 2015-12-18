@@ -40,9 +40,9 @@ define users::user (
 
   # Create the user's group.
 
-  #group { $username:
-  #  gid => $uid
-  #}
+  group { $username:
+    gid => $uid
+  }
 
   # Create the user.
 
