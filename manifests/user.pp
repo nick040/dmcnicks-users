@@ -24,6 +24,9 @@
 #   (Optional) Hash of ssh keys to be added to the user's authorized_keys
 #   file.
 #
+# [*ensure*]
+#   (Optional) Can be set to 'absent' to delete user
+#
 # === Authors
 #
 # David McNicol <david@mcnicks.org>
@@ -31,6 +34,7 @@
 
 define users::user (
   $uid,
+  $ensure   = 'present',
   $username = $title,
   $realname = $title,
   $password = '!',
@@ -47,7 +51,7 @@ define users::user (
   # Create the user.
 
   user { $username:
-    ensure         => 'present',
+    ensure         => $ensure,
     uid            => $uid,
     gid            => 33,
     comment        => $realname,
