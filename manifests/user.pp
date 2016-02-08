@@ -25,7 +25,10 @@
 #   file.
 #
 # [*ensure*]
-#   (Optional) Can be set to 'absent' to delete user
+#   (Optional) Can be set to 'absent' to delete user, default is 'present'
+#
+# [*ensuredir*]
+#   (Optional) Can be set to 'absent' to delete directory, default is 'directory'
 #
 # === Authors
 #
@@ -35,6 +38,7 @@
 define users::user (
   $uid,
   $ensure   = 'present',
+  $ensuredir= 'directory',
   $username = $title,
   $realname = $title,
   $password = '!',
@@ -67,7 +71,7 @@ define users::user (
   # Create the user's home directory.
 
   file { "/home/${username}":
-    ensure  => 'directory',
+    ensure  => $ensuredir,
     owner   => $username,
     group   => $username,
     mode    => '0700',
@@ -79,7 +83,7 @@ define users::user (
   $sshkey_hash = users_hash_sshkeys($username, $sshkeys)
 
   file { "/home/${username}/.ssh":
-    ensure  => 'directory',
+    ensure  => $ensuredir,
     owner   => $username,
     group   => $username,
     mode    => '0700',
