@@ -57,7 +57,7 @@ define users::user (
   user { $username:
     ensure         => $ensure,
     uid            => $uid,
-    gid            => 33,
+    gid            => $uid,
     comment        => $realname,
     password       => $password,
     groups         => $groups,
